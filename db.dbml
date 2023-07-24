@@ -1,0 +1,73 @@
+table book {
+  id bigint [PK]
+  title varchar
+  description text
+  image varchar
+  isbn char
+  categories_id varchar
+}
+
+table categories {
+  id bigint [PK]
+  title varchar
+}
+
+table books {
+  id bigint [PK]
+  book_id bigint
+  status enum
+}
+
+table users {
+  id bigint [PK]
+  name varchar
+  email varchar
+  address varchar
+}
+
+table officers {
+  id bigint [PK]
+  name varchar
+  email varchar
+  address varchar
+}
+
+table logs {
+  id bigint [PK]
+  books_id bigint
+  users_id bigint
+  officers_id_borrow bigint
+  officers_id_return bigint
+  borrow_date timestamptz
+  limit_date timestamptz
+  return_date timestamptz
+}
+
+table penalty {
+  id bigint [PK]
+  logs_id bigint
+  days int
+  total varchar
+}
+
+table fine {
+  id bigint [PK]
+  logs_id bigint
+  days int
+  total varchar
+  categories_id bigint
+}
+
+Ref: books.book_id > book.id
+
+Ref: books.id - logs.books_id
+
+Ref: book.categories_id > categories.id
+
+Ref: logs.books_id - books.id
+Ref: logs.users_id > users.id
+Ref: logs.officers_id_borrow > officers.id
+Ref: logs.officers_id_return > officers.id
+
+
+Ref: logs.id - penalty.logs_id
