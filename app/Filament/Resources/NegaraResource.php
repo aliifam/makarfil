@@ -47,6 +47,7 @@ class NegaraResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('kode')
+                    ->formatStateUsing(fn (string $state): string => __(strtoupper($state)))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('nama')
