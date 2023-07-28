@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('provinsis', function (Blueprint $table) {
             $table->id();
-            $table->foreign("negara_id")->references("id")->on("negaras")->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId("negara_id")->references("id")->on("negaras")->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama');
             $table->timestamps();
         });

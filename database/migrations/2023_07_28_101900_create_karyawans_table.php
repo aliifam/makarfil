@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nama_lengkap');
             $table->string('email')->unique();
-
-            $table->foreign("departemen_id")->references("id")->on("departemens")->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreign("kota_id")->references("id")->on("kotas")->cascadeOnDelete()->cascadeOnUpdate();
-            $
+            $table->text('alamat');
+            $table->dateTime('tanggal_bergabung');
+            $table->foreignId("departemen_id")->references("id")->on("departemens")->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId("kota_id")->references("id")->on("kotas")->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

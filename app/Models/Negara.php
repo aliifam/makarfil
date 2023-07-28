@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Negara extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nama',
+        'kode'
+    ];
+
+    public function provinsis()
+    {
+        return $this->hasMany(Provinsi::class);
+    }
 }
