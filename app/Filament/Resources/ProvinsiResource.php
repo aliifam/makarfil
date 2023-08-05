@@ -15,7 +15,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\Layout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -63,7 +65,13 @@ class ProvinsiResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Filter::make('negara_id')
+                    ->select(
+                        Negara::all()->pluck('nama', 'id')
+                    )
+                    ->label('Negara')
+                    ->nullable()
+                    ->default(null),
             ],
             layout:Layout::AboveContent,
             )

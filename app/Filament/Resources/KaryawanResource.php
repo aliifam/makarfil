@@ -16,10 +16,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-
-use App\Models\Provinsi;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
+
+use App\Models\Provinsi;
+use App\Models\Departemen;
+use App\Models\Kota;
+use App\Models\Negara;
 
 class KaryawanResource extends Resource
 {
@@ -51,13 +54,6 @@ class KaryawanResource extends Resource
                         ->placeholder('alamat email')
                         ->email()
                         ->maxLength(255),
-                    Textarea::make('alamat')
-                        ->label('Alamat')
-                        ->required()
-                        ->autofocus()
-                        ->placeholder('Alamat Lengkap')
-                        ->minLength(10)
-                        ->maxLength(255),
                     DatePicker::make('tanggal_bergabung')
                         ->label('Tanggal Bergabung')
                         ->required()
@@ -68,18 +64,58 @@ class KaryawanResource extends Resource
                         ->required()
                         ->placeholder('Pilih Departemen')
                         ->options(
-                            Departemen::all()->pluck('nama', 'id')
+                            Departemen::all()->pluck('name', 'id')
                         )
                         ->searchable(),
-                    //choose country first and then province with dependant select
+                    Textarea::make('alamat')
+                        ->label('Alamat')
+                        ->required()
+                        ->autofocus()
+                        ->placeholder('Alamat Lengkap')
+                        ->minLength(10)
+                        ->maxLength(255),
+
+                    Select::make('negara_id')
+                        ->label('Negara')
+                        ->required()
+                        ->placeholder('Pilih Negara')
+                        ->options(
+                            Negara::all()->pluck('nama', 'id')
+                        )
+                        ->searchable()
+                        ->reactive()
+                        ->afterStateUpdated(fn (callable $set) => $set('provinsi_id', null)),
                     Select::make('provinsi_id')
                         ->label('Provinsi')
                         ->required()
                         ->placeholder('Pilih Provinsi')
                         ->options(
-                            Provinsi::all()->pluck('nama', 'id')
+                            function (callable $get){
+                                $negara = Negara::find($get('negara_id'));
+                                if (!$negara) {
+                                    return [];
+                                }
+                                return $negara->provinsis()->pluck('nama', 'id');
+                            }
                         )
                         ->searchable()
+                        ->reactive()
+                        ->afterStateUpdated(fn (callable $set) => $set('kota_id', null)),
+                    Select::make('kota_id')
+                        ->label('Kota')
+                        ->required()
+                        ->placeholder('Pilih Kota')
+                        ->options(
+                            function (callable $get){
+                                $provinsi = Provinsi::find($get('provinsi_id'));
+                                if (!$provinsi) {
+                                    return [];
+                                }
+                                return $provinsi->kotas()->pluck('nama', 'id');
+                            }
+                        )
+                        ->searchable(),
+                    //choose country first and then province with dependant select
                 ]),
             ]);
     }
