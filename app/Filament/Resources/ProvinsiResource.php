@@ -65,13 +65,7 @@ class ProvinsiResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Filter::make('negara_id')
-                    ->select(
-                        Negara::all()->pluck('nama', 'id')
-                    )
-                    ->label('Negara')
-                    ->nullable()
-                    ->default(null),
+                
             ],
             layout:Layout::AboveContent,
             )

@@ -57,7 +57,6 @@ class KaryawanResource extends Resource
                     DatePicker::make('tanggal_bergabung')
                         ->label('Tanggal Bergabung')
                         ->required()
-                        ->autofocus()
                         ->placeholder('Tanggal Bergabung'),
                     Select::make('departemen_id')
                         ->label('Departemen')
@@ -84,7 +83,10 @@ class KaryawanResource extends Resource
                         )
                         ->searchable()
                         ->reactive()
-                        ->afterStateUpdated(fn (callable $set) => $set('provinsi_id', null)),
+                        ->afterStateUpdated(function (callable $set) {
+                            $set('provinsi_id', null);
+                            $set('kota_id', null);
+                        }),
                     Select::make('provinsi_id')
                         ->label('Provinsi')
                         ->required()
@@ -100,7 +102,9 @@ class KaryawanResource extends Resource
                         )
                         ->searchable()
                         ->reactive()
-                        ->afterStateUpdated(fn (callable $set) => $set('kota_id', null)),
+                        ->afterStateUpdated(function (callable $set) {
+                            $set('kota_id', null);
+                        }),
                     Select::make('kota_id')
                         ->label('Kota')
                         ->required()
