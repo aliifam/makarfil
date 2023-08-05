@@ -11,6 +11,7 @@ class Kota extends Model
 
     protected $fillable = [
         'nama',
+        'provinsi_id',
     ];
 
     public function provinsi()

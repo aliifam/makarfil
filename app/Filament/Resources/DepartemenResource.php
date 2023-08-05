@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DepartemenResource\Pages;
 use App\Filament\Resources\DepartemenResource\RelationManagers;
 use App\Models\Departemen;
+use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,12 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+
+use Filament\Tables\Columns\TextColumn;
 
 class DepartemenResource extends Resource
 {
@@ -23,7 +30,14 @@ class DepartemenResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Card::make([
+                    TextInput::make('name')
+                        ->label('Nama Departemen')
+                        ->required()
+                        ->autofocus()
+                        ->placeholder('Nama Departemen')
+                        ->maxLength(100),
+                ]),
             ]);
     }
 
@@ -31,7 +45,13 @@ class DepartemenResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->label('Nama Departemen')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
