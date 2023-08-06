@@ -16,12 +16,19 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Hash;
+
+use Phpsa\FilamentPasswordReveal\Password;
+
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -36,26 +43,29 @@ class UserResource extends Resource
                         ->maxLength(255),
                     TextInput::make('email')
                         ->label('Email')
-                        ->required()
+                        ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
                         ->autofocus()
                         ->email()
                         ->placeholder('Email')
-                        ->maxLength(255),
-                    TextInput::make('passsword')
+                        ->maxLength(255)
+                        ->minLength(9),
+                    Password::make('password')
                         ->label('Password')
-                        ->required()
+                        ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
                         ->autofocus()
                         ->password()
+                        ->same('confirmPassword')
+                        ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                         ->placeholder('Password')
-                        ->maxLength(255),
-                    TextInput::make('confirmPasssword')
+                        ->maxLength(255)
+                        ->minLength(9),
+                    Password::make('confirmPassword')
                         ->label('Konfirmasi Password')
-                        ->required()
+                        ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
                         ->autofocus()
                         ->password()
                         ->placeholder('Konfirmasi Password')
                         ->maxLength(255),
-                    
                 ]),
             ]);
     }
@@ -64,7 +74,11 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')->sortable(),
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('email')->searchable()->sortable(),
+                TextColumn::make('created_at')->searchable()->sortable(),
+                TextColumn::make('updated_at')->searchable()->sortable(),
             ])
             ->filters([
                 //
@@ -80,7 +94,6 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
     

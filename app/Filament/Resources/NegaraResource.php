@@ -20,7 +20,7 @@ class NegaraResource extends Resource
 {
     protected static ?string $model = Negara::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-flag';
 
     public static function form(Form $form): Form
     {
